@@ -1,0 +1,126 @@
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>Document</title>
+			<title></title>
+				<script type="text/javascript">
+					function calc(L,s, alphaCB, alphaOB, alphaKOH, Nk){
+					// N - число сваренныйх соединений
+					var N=Math.ceil(L/s-1)+2;
+
+					// Потери в оптическом тракте
+					var A = L * alphaOB + N * alphaCB + Nk * alphaKOH;
+					return A;
+					}
+
+					function main(L,s, alphaCB, alphaOB, alphaKOH, Nk,di){
+					// L - длина оатической линии, s - строительная длина оптического кабеля
+					var A=calc(L,s, alphaCB, alphaOB, alphaKOH, Nk);
+					// Заменил на таблицу на спан, чтобы выравнивалось по центру 
+					var text = "<span>Потери: " + "<b>" + A + "</b>" + "</span>";
+					document.getElementById(di).innerHTML = text;
+					return A;
+					}
+
+					function calcFG(Pr, Ptr, Gtx, Ac, Apl, Apenl, Afl, Abl, Afad, Arl){
+						// B - расчет бюджета мощности канала
+						var B = Ptr - Pr + Gtx - Ac - Gtx + Apl - Apenl - Afl - Abl - Arl - Afad;
+						return B;
+					}
+					
+					function mainFG(Pr, Ptr, Gtx, Ac, Apl, Apenl, Afl, Abl, Afad, Arl, di){
+					var B = calcFG(Pr, Ptr, Gtx, Ac, Apl, Apenl, Afl, Abl, Afad, Arl);
+					// Заменил таблицу на спан, чтобы выравнивалось по центру 
+						if (B > 0){
+						var result = "PASS";
+						}else if(B < 0){
+						var result = "FAIL";
+						}else{
+						var result = "*PASS";
+						}
+						var text = "<span>Мощность канала: " + "<b>" + result + "</b>" + "</span>";
+						document.getElementById(di).innerHTML = text;
+						return B;
+					}
+				</script>
+				
+				<style>
+					body {
+					background:#c7b39b url(pag1.jpg);
+					width: 100%;
+					text-align: center;
+					}
+				</style>
+	</head>
+	
+	<body>
+		<h1 style="text-align:center;"> КАЛЬКУЛЯТОР ВОЛС</h1>
+		<p style="text-align:center;">Введите длину каебльной линии связи в км</p>
+		<input style="text-align:center; text-align:center;" type="text" value=" " id="editLine1" />
+		<p style="text-align:center;">Введите строительную длину кабеля в км</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine2" />
+		<p style="text-align:center;">Потери на сварном соединении в дБ</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine3" />
+		<p style="text-align:center;">Коэффициент затухания волокна в дБ</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine4" />
+		<p style="text-align:center;">Потери на разъемном соединении (коннекторе) в дБ</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine5" />
+		<p style="text-align:center;">Число разъемных соединений в шт</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine6" />
+		<br />
+		<br />
+		<input style="text-align:center;" type="button" value="Рассчитать"
+		onClick="main(document.getElementById('editLine1').value,
+		document.getElementById('editLine2').value, 
+		document.getElementById('editLine3').value,
+		document.getElementById('editLine4').value, 
+		document.getElementById('editLine5').value,
+		document.getElementById('editLine6').value,'dat')" />
+		<br />
+		<br />
+		<div style="display:block; text-align:center; width: 100%;" id="dat">
+		</div>
+	</body>
+	
+	<body>
+		<h1 style="text-align:center;"> КАЛЬКУЛЯТОР 5G</h1>
+		<p style="text-align:center;">чувстивительность приемника</p>
+		<input style="text-align:center; text-align:center;" type="text" value=" " id="editLine7" />
+		<p style="text-align:center;">мощность передатчика</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine8" />
+		<p style="text-align:center;">коэф. усиления приемной антенны</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine9" />
+		<p style="text-align:center;">потери в фидере на приемном конце</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine10" />
+		<p style="text-align:center;">потери при распространении сигнала</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine11" />
+		<p style="text-align:center;">потери на проникновение</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine12" />
+		<p style="text-align:center;">потери на листве крон деревьев</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine13" />
+		<p style="text-align:center;">потери при прохождении тела человека</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine14" />
+		<p style="text-align:center;">запас по потерям на случай замираний</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine15" />
+		<p style="text-align:center;">запас по потерям на случай дождя</p>
+		<input style="text-align:center;" type="text" value=" " id="editLine16" />
+		<br />
+		<br />
+		<input style="text-align:center;" type="button" value="Рассчитать"
+		onClick="mainFG(document.getElementById('editLine7').value,
+		document.getElementById('editLine8').value, 
+		document.getElementById('editLine9').value,
+		document.getElementById('editLine10').value, 
+		document.getElementById('editLine11').value,
+		document.getElementById('editLine12').value, 
+		document.getElementById('editLine13').value, 
+		document.getElementById('editLine14').value,
+		document.getElementById('editLine15').value, 
+		document.getElementById('editLine16').value,'dat1')" />
+		<br />
+		<br />
+		<div style="display:block; text-align:center; width: 100%;" id="dat1">
+		</div>
+	</body>
+</html>
